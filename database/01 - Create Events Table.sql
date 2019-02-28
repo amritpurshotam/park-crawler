@@ -1,9 +1,0 @@
-CREATE TABLE [dbo].[Events]
-(
-	[EventId] INT NOT NULL IDENTITY(1,1),
-	[Name] VARCHAR(500) NOT NULL,
-	[Url] VARCHAR(500) NOT NULL,
-	[Latitude] DECIMAL(9,6) NOT NULL,
-	[Longitude] DECIMAL(9,6) NOT NULL,
-	CONSTRAINT [PK_Events] PRIMARY KEY CLUSTERED ([EventId] ASC)
-);
