@@ -18,5 +18,5 @@ for region in tree.getroot():
         continue
     else:
         if region.attrib['r'] in region_arr:
-            print("{}\t{}\t{}\t{}".format(region.attrib['n'], region.attrib['m'], region.attrib['la'], region.attrib['lo']))
+            print("{}\t{}\t{}\t{}\t{}".format(region.attrib['id'], region.attrib['n'], region.attrib['m'], region.attrib['la'], region.attrib['lo']))
         index = index + 1
