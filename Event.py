@@ -8,8 +8,6 @@ class Event(Base):
     __table__ = 'Events'
 
     id = Column('EventId', Integer, primary_key=True)
-    course_id = Column('CourseId', Integer, ForeignKey('Courses.CourseId'))
+    course_id = Column('CourseId', Integer)
     run_sequence_number = Column('RunSequenceNumber', Integer)
     date = Column('Date', Date)
-
-    course = relationship('Courses', foreign_keys=[course_id])

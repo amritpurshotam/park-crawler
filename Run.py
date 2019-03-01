@@ -8,7 +8,7 @@ class Run(Base):
     __tablename__ = 'Runs'
 
     run_id = Column('RunId', Integer, primary_key=True)
-    event_id = Column('EventId', Integer, ForeignKey('Events.EventId'))
+    event_id = Column('EventId', Integer)
     park_runner_id = Column('ParkRunnerId', Integer)
     position = Column('Position', Integer)
     minutes = Column('Minutes', Integer),
@@ -19,5 +19,3 @@ class Run(Base):
     age_grade = Column('AgeGrade', Float(precision=2))
     gender = Column('Gender', String(1))
     gender_position = Column('GenderPosition', Integer)
-
-    event = relationship('Events', foreign_keys=[event_id])
