@@ -1,4 +1,5 @@
 import urllib.request
+import time
 
 def get(url: str):
     req = urllib.request.Request(
@@ -10,4 +11,5 @@ def get(url: str):
     )
 
     result = urllib.request.urlopen(req)
+    time.sleep(1)
     return result
