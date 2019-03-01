@@ -4,6 +4,7 @@ from models.Country import Country
 from models.Region import Region
 from models.Course import Course
 from db import get_session, add, commit
+from bs4 import BeautifulSoup
 
 def add_country(country_dict):
     id = country_dict['id']
@@ -32,6 +33,22 @@ def add_course(course_dict):
     longitude = course_dict['lo']
     course = Course(id=id, region_id=region_id, name=name, url=url, latitude=latitude, longitude=longitude)
     add(course, session)
+
+def get_course_description(url):
+    result = get(url)
+    soup = BeautifulSoup(result, 'html.parser')
+    titles = soup.find_all('h2')
+    description = []
+
+    for title in titles:
+        if title.contents[0] == 'Course Description':
+            for sibling in title.next_siblings:
+                if sibling.name == 'h2':
+                    break
+                if sibling.name == 'br':
+                    continue
+                description.append(str.strip(sibling.string))
+    return ' '.join(description)
 
 result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
 tree = ET.parse(result)

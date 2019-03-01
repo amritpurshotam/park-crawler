@@ -13,3 +13,4 @@ class Course(Base):
     url = Column('Url', String(200))
     latitude = Column('Latitude', Float(precision=6))
     longitude = Column('Longitude', Float(precision=6))
+    description = Column('Description', String(2000))
