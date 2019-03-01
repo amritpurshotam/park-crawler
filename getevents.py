@@ -31,7 +31,8 @@ def add_course(course_dict):
     name = course_dict['m']
     latitude = course_dict['la']
     longitude = course_dict['lo']
-    course = Course(id=id, region_id=region_id, name=name, url=url, latitude=latitude, longitude=longitude)
+    description = get_course_description(url + "/course")
+    course = Course(id=id, region_id=region_id, name=name, url=url, latitude=latitude, longitude=longitude, description=description)
     add(course, session)
 
 def get_course_description(url):
@@ -45,35 +46,55 @@ def get_course_description(url):
             for sibling in title.next_siblings:
                 if sibling.name == 'h2':
                     break
-                if sibling.name == 'br':
+                elif sibling.name == 'br':
                     continue
-                description.append(str.strip(sibling.string))
+                elif sibling.name == 'ul':
+                    for item in sibling.descendants:
+                        if item.string is not None:
+                            stripped = str.strip(item.string)
+                            if stripped != '':
+                                description.append(stripped)
+                elif sibling.string is not None and sibling.string != '\n':
+                    description.append(str.strip(sibling.string))
+    description = deduplicate(description)
     return ' '.join(description)
 
-result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
-tree = ET.parse(result)
+def deduplicate(string_list):
+    seen = set()
+    result = []
+    for item in string_list:
+        if item not in seen:
+            seen.add(item)
+            result.append(item)
+    return result
 
-region_arr = []
-session = get_session()
 
-for country in tree.getroot()[0]:
-    if (country.attrib['n'] == 'South Africa'):
-        add_country(country.attrib)
-        for region in country:
-            add_region(region.attrib)
-            region_arr.append(region.attrib['id'])
-        break
-    
-commit(session)   
+if __name__ == "__main__":
+    result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
+    tree = ET.parse(result)
 
-index = 0
-for event in tree.getroot():
-    if index == 0:
-        index = index + 1
-        continue
-    else:
-        if event.attrib['r'] in region_arr:
-            add_course(event.attrib)
-        index = index + 1
+    region_arr = []
+    session = get_session()
 
-commit(session)
+    for country in tree.getroot()[0]:
+        if (country.attrib['n'] == 'South Africa'):
+            add_country(country.attrib)
+            commit(session)
+            for region in country:
+                add_region(region.attrib)
+                region_arr.append(region.attrib['id'])
+            break
+        
+    commit(session)   
+
+    index = 0
+    for event in tree.getroot():
+        if index == 0:
+            index = index + 1
+            continue
+        else:
+            if event.attrib['r'] in region_arr:
+                add_course(event.attrib)
+            index = index + 1
+
+    commit(session)
