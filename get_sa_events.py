@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 from models.Country import Country
 from models.Region import Region
 from models.Course import Course
-from db import save_all, save, load_all
+from db import save_all, save, load_all_ids
 from bs4 import BeautifulSoup
 
 def get_course_description(url):
@@ -44,18 +44,25 @@ if __name__ == "__main__":
     result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
     tree = ET.parse(result)
 
+    existing_country_ids = load_all_ids(Country)
     for country_xml in tree.getroot()[0]:
         if (country_xml.attrib['n'] == 'South Africa'):
-            country = Country(country_xml.attrib)
-            save(country)
+            country_id = int(country_xml.attrib['id'])
+            if country_id not in existing_country_ids:
+                country = Country(country_xml.attrib)
+                save(country)
 
+            existing_region_ids = load_all_ids(Region)
             regions = []
             for region in country_xml:
-                regions.append(Region(region.attrib))
+                region_id = int(region.attrib['id'])
+                if region_id not in existing_region_ids:
+                    regions.append(Region(region.attrib))
             save_all(regions)
             break
 
-    region_ids = list(map(lambda region: region.id, load_all(Region)))
+    region_ids = load_all_ids(Region)
+    existing_course_ids = load_all_ids(Course)
     courses = []
     skip = True
     for course in tree.getroot():
@@ -64,8 +71,10 @@ if __name__ == "__main__":
             continue
         else:
             if int(course.attrib['r']) in region_ids:
-                url = "{}/{}/course".format('https://www.parkrun.co.za', course.attrib['n'])
-                description = get_course_description(url)
-                courses.append(Course(course.attrib, description))
-                counter = counter + 1
+                course_id = int(course.attrib['id'])
+                if course_id not in existing_course_ids:
+                    url = "{}/{}/course".format('https://www.parkrun.co.za', course.attrib['n'])
+                    description = get_course_description(url)
+                    courses.append(Course(course.attrib, description))
+            
     save_all(courses)
