@@ -13,8 +13,18 @@ def get_session():
     session = Session()
     return session
 
-def add(entity, session):
-    session.add(entity)
+def load_all(entity):
+    sess = get_session()
+    entities = sess.query(entity).all()
+    return entities
 
-def commit(session):
-    session.commit()
+def save(entity):
+    sess = get_session()
+    sess.add(entity)
+    sess.commit()
+
+def save_all(entities):
+    sess = get_session()
+    for entity in entities:
+        sess.add(entity)
+    sess.commit()

@@ -12,3 +12,10 @@ class Country(Base):
     base_url = Column('BaseUrl', String(100))
     latitude = Column('Latitude', Float(precision=6))
     longitude = Column('Longitude', Float(precision=6))
+
+    def __init__(self, country_dict):
+        self.id = country_dict['id']
+        self.name = country_dict['n']
+        self.base_url = country_dict['u']
+        self.latitude = country_dict['la']
+        self.longitude = country_dict['lo']
