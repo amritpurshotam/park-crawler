@@ -1,9 +1,9 @@
-from request import get
+from data.request import get
 import xml.etree.ElementTree as ET
 from models.Country import Country
 from models.Region import Region
 from models.Course import Course
-from db import save_all, save, load_all_ids
+from data.db import save_all, save, load_all_ids
 from bs4 import BeautifulSoup
 
 def get_course_description(url):
@@ -39,8 +39,7 @@ def deduplicate(string_list):
             result.append(item)
     return result
 
-
-if __name__ == "__main__":
+def run():
     result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
     tree = ET.parse(result)
 
@@ -70,11 +69,12 @@ if __name__ == "__main__":
             skip = False
             continue
         else:
-            if int(course.attrib['r']) in region_ids:
-                course_id = int(course.attrib['id'])
-                if course_id not in existing_course_ids:
-                    url = "{}/{}/course".format('https://www.parkrun.co.za', course.attrib['n'])
-                    description = get_course_description(url)
-                    courses.append(Course(course.attrib, description))
+            if course.attrib['r'] != '':
+                if int(course.attrib['r']) in region_ids:
+                    course_id = int(course.attrib['id'])
+                    if course_id not in existing_course_ids:
+                        url = "{}/{}/course".format('https://www.parkrun.co.za', course.attrib['n'])
+                        description = get_course_description(url)
+                        courses.append(Course(course.attrib, description))
             
     save_all(courses)
