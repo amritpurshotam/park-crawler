@@ -18,16 +18,22 @@ def get_course_event_list(url, course_id):
     return events
 
 def get_event_results(url, event_id):
-    event_results = {}
-    event_page = BeautifulSoup(get(url), 'html.parser')
+    event_page = BeautifulSoup(get(url + "/results/weeklyresults/?runSeqNumber={}".format(event_id)), 'html.parser')
     result_table = event_page.find_all('tbody')
     results = []
     for row in result_table[0].find_all('tr'):
+        print(row)
         aux = row.find_all('td')
         time_str = aux[2].string
-        results.append(Run({'position': aux[0].string, 'id': hash(row.a['href'].strip("athletehistory?athleteNumber=")), 'hours':time_str[0:2], 'minutes':time_str[3:5], 'seconds':time_str[6:10] , 'age_category': aux[3].string, 'age_grade': aux[4].string,
-                                      'gender': aux[5].string, 'gender_position': aux[6].string, 'note:': aux[8].string}), event_id)
+        if aux[1].string == 'Unknown':
+            results.append(Run({'position': aux[0].string, 'id': 0, 'hours':None, 'minutes':None, 'seconds':None , 'age_category': None, 'age_grade': None,
+                                      'gender': None, 'gender_position': None, 'note': None}, event_id))
+        else:
+            results.append(Run({'position': int(aux[0].string), 'id': hash(row.a['href'].strip("athletehistory?athleteNumber=")), 'hours':int(time_str[0:2]), 'minutes':int(time_str[3:5]), 'seconds':int(time_str[6:8]) , 'age_category': aux[3].string, 'age_grade': aux[4].string,
+                                      'gender': aux[5].string, 'gender_position': int(aux[6].string), 'note': aux[8].string}, event_id))
     return results
+
+
 
 def get_all_event_results(): #id for each event
     courses = load_all(Course)
@@ -44,13 +50,11 @@ def get_all_event_results(): #id for each event
             results = get_event_results(course.url + "/results/weeklyresults/?runSeqNumber={}".format(event.run_sequence_number), event_id)
             save_all(results)
 
-events = get_course_event_list("https://www.parkrun.co.za/meyersfarm", 2236)
-
-#print(events)
-
-save_all(events)
-
-
+# events = get_course_event_list("https://www.parkrun.co.za/meyersfarm", 2236)
+# save_all(events)
+url = "http://www.parkrun.co.za/meyersfarm"
+results = get_event_results(url, 2)
+save_all(results)
 
 
 
