@@ -5,7 +5,7 @@ def get_session():
     driver = 'SQL+Server'
     username = "ParkrunUser"
     password = "abc123"
-    host = "AMRITPU-PC"
+    host = "(local)"
     database = "Parkrun"
     connection_string = "mssql+pyodbc://{0}:{1}@{2}/{3}?driver={4}".format(username, password, host, database, driver)
     engine = create_engine(connection_string)
