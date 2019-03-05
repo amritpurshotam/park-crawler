@@ -6,6 +6,8 @@ from models.Course import Course
 from models.Run import Run
 from decimal import Decimal
 from data.db import save_all, save, load_all
+from data.repository.event import load_by_course
+from data.repository.course import get_by_id
 
 def get_course_event_list(url, course_id):
     event_page = BeautifulSoup(get(url + "/results/eventhistory"), "html.parser")
@@ -18,12 +20,11 @@ def get_course_event_list(url, course_id):
 
     return events
 
-def get_event_results(url, event_id):
-    event_page = BeautifulSoup(get(url + "/results/weeklyresults/?runSeqNumber={}".format(event_id)), 'html.parser')
+def get_event_results(url, event_id, seq_num):
+    event_page = BeautifulSoup(get(url + "/results/weeklyresults/?runSeqNumber={}".format(seq_num)), 'html.parser')
     result_table = event_page.find_all('tbody')
     results = []
     for row in result_table[0].find_all('tr'):
-        print(row)
         aux = row.find_all('td')
         time_str = aux[2].string
         if aux[1].string == 'Unknown':
@@ -43,64 +44,25 @@ def get_event_results(url, event_id):
 
 def get_all_event_results(): #id for each event
     courses = load_all(Course)
+    # courses = []
+    # courses.append(get_by_id(2236))
+    # courses.append(get_by_id(2228))
+
 
     for course in courses:
         course_id = course.id
-
+        print("Scraping course id " + course_id)
 
         events = get_course_event_list(course.url, course_id)
         save_all(events)
 
+        events = load_by_course(course_id)
+
         for event in events:
             event_id = event.id
-            results = get_event_results(course.url + "/results/weeklyresults/?runSeqNumber={}".format(event.run_sequence_number), event_id)
+            print("Scraping event " + event_id)
+            seq_num = event.run_sequence_number
+            results = get_event_results(course.url, event_id, seq_num)
             save_all(results)
-
-# events = get_course_event_list("https://www.parkrun.co.za/meyersfarm", 2236)
-# save_all(events)
-url = "http://www.parkrun.co.za/meyersfarm"
-results = get_event_results(url, 2)
-save_all(results)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# url = "http://www.parkrun.co.za/meyersfarm/results"
-# rs = get_event_results(url)
-# print(rs['1'])
-
-# url = "http://www.parkrun.co.za/meyersfarm/results/weeklyresults/?runSeqNumber=3"
-# run_results = {}
-# event_results = BeautifulSoup(get(url), 'html.parser')
-# result_table = event_results.find_all('tbody')
-# for row in result_table[0].find_all('tr'):
-#     aux = row.find_all('td')
-#     run_results[aux[0].string] = {'Time': aux[2].string, 'Age_Cat': aux[3].string, 'Age_Grade': aux[4].string, 'Gender': aux[5].string, 'Gender_Pos': aux[6].string}
-#
-
-# url = "http://www.parkrun.co.za/meyersfarm/results/eventhistory"
-#
-# event = BeautifulSoup(get(url), "html.parser")
-
-# results = {}
-# event_table = event.find_all('tbody')
-# for row in event_table[0].find_all('tr'):
-#     aux = row.find_all('td')
-#     results[aux[0].string] = {"url_ext" :row.a["href"].strip(".."), "date": aux[1].string}
-#
-# print(results)
 
 
