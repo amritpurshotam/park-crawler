@@ -9,7 +9,7 @@ class Run(Base):
 
     run_id = Column('RunId', Integer, primary_key=True)
     event_id = Column('EventId', Integer)
-    parkrunner_id = Column('ParkRunnerId', Integer)
+    parkrunner_id = Column('ParkRunnerId', String(50))
     position = Column('Position', Integer)
     hours = Column('Hours', Integer)
     minutes = Column('Minutes', Integer)
@@ -18,7 +18,7 @@ class Run(Base):
     age_grade = Column('AgeGrade', Float(precision=2))
     gender = Column('Gender', String(1))
     gender_position = Column('GenderPosition', Integer)
-    note = Column('Note', String(20))
+    note = Column('Note', String(50))
 
     def __init__(self, run_dict, event_id):
         self.event_id = event_id
