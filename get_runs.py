@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from models.Event import Event
 from models.Course import Course
 from models.Run import Run
+from decimal import Decimal
 from data.db import save_all, save, load_all
 
 def get_course_event_list(url, course_id):
@@ -29,10 +30,15 @@ def get_event_results(url, event_id):
             results.append(Run({'position': aux[0].string, 'id': 0, 'hours':None, 'minutes':None, 'seconds':None , 'age_category': None, 'age_grade': None,
                                       'gender': None, 'gender_position': None, 'note': None}, event_id))
         else:
-            results.append(Run({'position': int(aux[0].string), 'id': hash(row.a['href'].strip("athletehistory?athleteNumber=")), 'hours':int(time_str[0:2]), 'minutes':int(time_str[3:5]), 'seconds':int(time_str[6:8]) , 'age_category': aux[3].string, 'age_grade': aux[4].string,
+            try:
+                hours=int(time_str[-7:-6])
+            except:
+                hours=int(0)
+            minutes=int(time_str[-5:-3])
+            seconds=int(time_str[-2:])
+            results.append(Run({'position': int(aux[0].string), 'id': str(hash(row.a['href'].strip("athletehistory?athleteNumber="))), 'hours':hours, 'minutes':minutes, 'seconds':seconds , 'age_category': aux[3].string, 'age_grade': Decimal(aux[4].string[:5]),
                                       'gender': aux[5].string, 'gender_position': int(aux[6].string), 'note': aux[8].string}, event_id))
     return results
-
 
 
 def get_all_event_results(): #id for each event
