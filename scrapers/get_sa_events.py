@@ -45,7 +45,7 @@ def run():
     tree = ET.fromstring(result)
 
     existing_country_ids = load_all_ids(Country)
-    for country_xml in tree.getroot()[0]:
+    for country_xml in tree[0]:
         if (country_xml.attrib['n'] == 'South Africa'):
             country_id = int(country_xml.attrib['id'])
             if country_id not in existing_country_ids:
@@ -65,7 +65,7 @@ def run():
     existing_course_ids = load_all_ids(Course)
     courses = []
     skip = True
-    for course in tree.getroot():
+    for course in tree:
         if skip == True:
             skip = False
             continue
