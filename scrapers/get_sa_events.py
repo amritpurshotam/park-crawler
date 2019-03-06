@@ -41,7 +41,8 @@ def deduplicate(string_list):
 
 def run():
     result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
-    tree = ET.parse(result)
+    result = result.replace('\n', '')
+    tree = ET.fromstring(result)
 
     existing_country_ids = load_all_ids(Country)
     for country_xml in tree.getroot()[0]:
