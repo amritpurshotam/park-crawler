@@ -39,8 +39,24 @@ def get_event_results(url, event_id, seq_num):
                 hours=int(0)
             minutes=int(time_str[-5:-3])
             seconds=int(time_str[-2:])
-            results.append(Run({'position': int(aux[0].string), 'id': str(hash(row.a['href'].strip("athletehistory?athleteNumber="))), 'hours':hours, 'minutes':minutes, 'seconds':seconds , 'age_category': aux[3].string, 'age_grade': Decimal(aux[4].string[:5]),
-                                      'gender': aux[5].string, 'gender_position': int(aux[6].string), 'note': aux[8].string}, event_id))
+            age_grade = aux[4].string
+            if age_grade is not None:
+                age_grade = Decimal(age_grade[:5])
+            
+            try:
+                results.append(Run({'position': int(aux[0].string), 
+                                    'id': str(hash(row.a['href'].strip("athletehistory?athleteNumber="))), 
+                                    'hours':hours, 
+                                    'minutes':minutes, 
+                                    'seconds':seconds , 
+                                    'age_category': aux[3].string, 
+                                    'age_grade': age_grade,
+                                    'gender': aux[5].string, 
+                                    'gender_position': int(aux[6].string), 
+                                    'note': aux[8].string}, event_id))
+            except Exception as e:
+                print(e)
+                print(aux)
 
     return results
 
