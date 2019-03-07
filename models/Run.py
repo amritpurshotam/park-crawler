@@ -14,7 +14,7 @@ class Run(Base):
     hours = Column('Hours', Integer)
     minutes = Column('Minutes', Integer)
     seconds = Column('Seconds', Integer)
-    age_category = Column('AgeCategory', String(7))
+    age_category = Column('AgeCategory', String(9))
     age_grade = Column('AgeGrade', Float(precision=2))
     gender = Column('Gender', String(1))
     gender_position = Column('GenderPosition', Integer)

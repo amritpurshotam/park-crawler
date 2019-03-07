@@ -1,0 +1,2 @@
+ALTER TABLE Runs
+ALTER COLUMN AgeCategory VARCHAR(9) 
