@@ -16,5 +16,5 @@ def get_all_course_seq_num(course_id):
 
 def get_event_without_run(course_id):
     sess = get_session()
-    events = sess.query(Event).filter_by(course_id=course_id).outerjoin(Run).group_by(Event.id, Event.course_id, Event.run_sequence_number, Event.date).having(func.count(Run.run_id)==0).all()
+    events = sess.query(Event).filter_by(course_id=course_id).outerjoin(Run).group_by(Event.id, Event.course_id, Event.run_sequence_number, Event.date).having(func.count(Run.run_id)==0).order_by(Event.run_sequence_number.desc()).all()
     return events
