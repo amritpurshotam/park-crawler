@@ -1,8 +1,6 @@
 from data.request import get
 import xml.etree.ElementTree as ET
-from models.Country import Country
-from models.Region import Region
-from models.Course import Course
+from data.models import Country, Region, Course
 from data.db import save_all, save, load_all_ids
 from bs4 import BeautifulSoup
 

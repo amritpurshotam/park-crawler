@@ -1,5 +1,5 @@
 from data.db import get_session
-from models.Run import Run
+from data.models import Run
 
 def count_by_event(event_id):
     sess = get_session()

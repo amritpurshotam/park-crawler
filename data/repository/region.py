@@ -1,5 +1,5 @@
 from data.db import get_session
-from models.Region import Region
+from data.models import Region
 
 def get_by_id(id: int):
     sess = get_session()

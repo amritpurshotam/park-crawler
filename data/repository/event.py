@@ -1,8 +1,8 @@
 from data.db import get_session
-from models.Event import Event
-from models.Run import Run
+from data.models import Event, Run
 from data.repository.run import count_by_event
 from datetime import datetime
+from sqlalchemy.sql import func
 
 def get_by_course(course_id):
     sess = get_session()
@@ -15,17 +15,6 @@ def get_all_course_seq_num(course_id):
     return ids
 
 def get_event_without_run(course_id):
-    events = get_by_course(course_id)
-    new_event = []
-    for event in events:
-        runs = count_by_event(event.id)
-        if runs == 0:
-            new_event.append(event)
-
-    return new_event
-
-
-
-
-
-
+    sess = get_session()
+    events = sess.query(Event).filter_by(course_id=course_id).outerjoin(Run).group_by(Event.id, Event.course_id, Event.run_sequence_number, Event.date).having(func.count(Run.run_id)==0).all()
+    return events

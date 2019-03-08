@@ -1,9 +1,6 @@
-
 from data.request import get
 from bs4 import BeautifulSoup
-from models.Event import Event
-from models.Course import Course
-from models.Run import Run
+from data.models import Event, Course, Run
 from decimal import Decimal
 from data.db import save_all, load_all
 from data.repository.event import get_all_course_seq_num, get_event_without_run
@@ -20,7 +17,7 @@ def get_course_event_list(url, course_id):
         if int(aux[0].string) not in runs:
             events.append(Event({'number':aux[0].string, 'date':aux[1].string}, course_id))
     return events
-
+    
 def get_event_results(url, event_id, seq_num):
     event_page = BeautifulSoup(get(url + "/results/weeklyresults/?runSeqNumber={}".format(seq_num)), 'html.parser')
     result_table = event_page.find_all('tbody')
