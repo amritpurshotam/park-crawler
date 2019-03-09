@@ -6,7 +6,8 @@ from data.db import save_all, load_all
 from data.repository.event import get_all_course_seq_num, get_event_without_run
 
 def get_course_event_list(url, course_id):
-    event_page = BeautifulSoup(get(url + "/results/eventhistory"), "html.parser")
+    html = get(url + "/results/eventhistory")
+    event_page = BeautifulSoup(html, "html.parser")
     event_table = event_page.find_all('tbody')
     events = []
     rows = event_table[0].find_all('tr')
@@ -19,7 +20,8 @@ def get_course_event_list(url, course_id):
     return events
     
 def get_event_results(url, event_id, seq_num):
-    event_page = BeautifulSoup(get(url + "/results/weeklyresults/?runSeqNumber={}".format(seq_num)), 'html.parser')
+    html = get(url + "/results/weeklyresults/?runSeqNumber={}".format(seq_num))
+    event_page = BeautifulSoup(html, 'html.parser')
     result_table = event_page.find_all('tbody')
     results = []
     rows = result_table[0].find_all('tr')
