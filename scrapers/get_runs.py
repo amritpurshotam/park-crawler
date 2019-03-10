@@ -65,14 +65,21 @@ def get_all_event_results():
         course_id = course.id
         print("Scraping course id " + str(course_id))
 
-        events = get_course_event_list(course.url, course_id)
-        save_all(events)
+        try:
+            events = get_course_event_list(course.url, course_id)
+            save_all(events)
+        except Exception:
+            print('Fetching course event list for course {} failed'.format(course_id))
+            continue
 
         events = get_event_without_run(course_id)
 
         for event in events:
             event_id = event.id
-            print("Scraping event " + str(event_id))
             seq_num = event.run_sequence_number
-            results = get_event_results(course.url, event_id, seq_num)
-            save_all(results)
+            try:
+                results = get_event_results(course.url, event_id, seq_num)
+                save_all(results)
+            except Exception:
+                print('Fetching results for event {} failed'.format(event_id))
+                continue
