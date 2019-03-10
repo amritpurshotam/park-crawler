@@ -17,5 +17,5 @@ def get(url: str):
     req = requests.get(url, headers={'user-agent': random.choice(dummy_user_agents)}, proxies = {'http': random.choice(proxies)})
 
     result = req.text
-    time.sleep(random.uniform(5,45))
+    time.sleep(4)
     return result
