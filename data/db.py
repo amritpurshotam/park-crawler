@@ -23,6 +23,10 @@ def load_all_ids(entity):
     ids = list(map(lambda entity: entity.id, sess.query(entity.id).all()))
     return ids
 
+def get_by_id(entity, id):
+    sess = get_session()
+    return sess.query(entity).get(id)
+
 def save(entity):
     sess = get_session()
     sess.add(entity)
