@@ -24,3 +24,8 @@ def get_event_without_run(course_id):
                 .order_by(Event.run_sequence_number.desc())\
                 .all()
     return events
+
+def get_all_dates():
+    sess = get_session()
+    dates = sess.query(Event.date).distinct().all()
+    return dates
