@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import numpy as np
 
-from models.Course import Course
-from models.Region import Region
+from data.models import Course, Region
 from data.repository.course import get_by_region, get_run_count_for_date
 from data.repository.event import get_all_dates
 from data.db import load_all_ids
