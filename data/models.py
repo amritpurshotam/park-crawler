@@ -24,7 +24,7 @@ class Region(Base):
     __tablename__ = 'Regions'
 
     id = Column('RegionId', Integer, primary_key=True)
-    country_id = Column('CountryId', Integer)
+    country_id = Column('CountryId', Integer, ForeignKey('Countries.CountryId'))
     name = Column('Name', String(100))
     latitude = Column('Latitude', Float(precision=6))
     longitude = Column('Longitude', Float(precision=6))
@@ -40,7 +40,7 @@ class Course(Base):
     __tablename__ = 'Courses'
 
     id = Column('CourseId', Integer, primary_key=True)
-    region_id = Column('RegionId', Integer)
+    region_id = Column('RegionId', Integer, ForeignKey('Regions.RegionId'))
     name = Column('Name', String(100))
     url = Column('Url', String(200))
     latitude = Column('Latitude', Float(precision=6))
@@ -60,7 +60,7 @@ class Event(Base):
     __tablename__ = 'Events'
 
     id = Column('EventId', Integer, primary_key=True)
-    course_id = Column('CourseId', Integer)
+    course_id = Column('CourseId', Integer, ForeignKey('Courses.CourseId'))
     run_sequence_number = Column('RunSequenceNumber', Integer)
     date = Column('Date', String(10))
 
