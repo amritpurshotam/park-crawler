@@ -21,3 +21,14 @@ def get_run_count_for_date(date: str):
                 .group_by(Course.id, Course.latitude, Course.longitude, Event.id)\
                 .all()
     return courses
+
+def get_run_count_for_date_in_regions(date: str, region_ids: list):
+    sess = get_session()
+    courses = sess.query(Course.latitude, Course.longitude, Course.region_id, func.count(Run.run_id).label('runners'))\
+                .filter(Course.region_id.in_(region_ids))\
+                .join(Event, Event.course_id==Course.id)\
+                .filter_by(date=date)\
+                .join(Run)\
+                .group_by(Course.id, Course.latitude, Course.longitude, Course.region_id, Event.id)\
+                .all()
+    return courses
