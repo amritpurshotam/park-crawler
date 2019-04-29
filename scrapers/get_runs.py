@@ -72,7 +72,6 @@ def get_all_event_results():
             continue
 
         events = get_events_without_run(course.id)
-
         for event in events:
             try:
                 results = get_event_results(course.url, event.id, event.run_sequence_number)
