@@ -74,11 +74,9 @@ def get_all_event_results():
         events = get_events_without_run(course.id)
 
         for event in events:
-            event_id = event.id
-            seq_num = event.run_sequence_number
             try:
-                results = get_event_results(course.url, event_id, seq_num)
+                results = get_event_results(course.url, event.id, event.run_sequence_number)
                 save_all(results)
             except Exception:
-                print('Fetching results for event {} failed'.format(event_id))
+                print('Fetching results for event {} failed'.format(event.id))
                 continue
