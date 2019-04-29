@@ -5,6 +5,27 @@ from decimal import Decimal
 from data.db import save_all, load_all
 from data.repository.event import get_all_course_seq_num, get_events_without_run
 
+def get_all_event_results():
+    courses = load_all(Course)
+    for course in courses:
+        print("Scraping course id " + str(course.id))
+
+        try:
+            events = get_new_events_for(course)
+            save_all(events)
+        except Exception:
+            print('Fetching course event list for course {} failed'.format(course.id))
+            continue
+
+        events = get_events_without_run(course.id)
+        for event in events:
+            try:
+                results = get_event_results(course.url, event.id, event.run_sequence_number)
+                save_all(results)
+            except Exception:
+                print('Fetching results for event {} failed'.format(event.id))
+                continue
+
 def get_new_events_for(course):
     html = get(course.url + "/results/eventhistory")
     event_page = BeautifulSoup(html, "html.parser")
@@ -58,24 +79,3 @@ def get_event_results(url, event_id, seq_num):
                 print(aux)
 
     return results
-
-def get_all_event_results():
-    courses = load_all(Course)
-    for course in courses:
-        print("Scraping course id " + str(course.id))
-
-        try:
-            events = get_new_events_for(course)
-            save_all(events)
-        except Exception:
-            print('Fetching course event list for course {} failed'.format(course.id))
-            continue
-
-        events = get_events_without_run(course.id)
-        for event in events:
-            try:
-                results = get_event_results(course.url, event.id, event.run_sequence_number)
-                save_all(results)
-            except Exception:
-                print('Fetching results for event {} failed'.format(event.id))
-                continue
