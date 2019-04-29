@@ -3,6 +3,7 @@ import os, random
 from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
 import matplotlib
+from matplotlib.lines import Line2D
 from mpl_toolkits.basemap import Basemap
 import numpy as np
 
@@ -62,7 +63,7 @@ def draw_national_parkruns(scaling_factor: float):
         plt.savefig(folder_name + filename, bbox_inches='tight')
         plt.close()
 
-def draw_gauteng(height, width, size, scaling_factor):
+def draw_gauteng(height, width, size, scaling_factor, n_jobs):
     dates = get_all_dates()
     region_ids = [34, 35, 57, 78, 79, 83]
     colour_dict = {}
@@ -70,7 +71,7 @@ def draw_gauteng(height, width, size, scaling_factor):
     for i in range(len(region_ids)):
         colour_dict[region_ids[i]] = cmap(float(i)/len(region_ids))[:3]
 
-    Parallel(n_jobs=4) (delayed(create_image_for_date)(date.date, region_ids, size, height, width, scaling_factor, colour_dict) for date in dates)
+    Parallel(n_jobs=n_jobs) (delayed(create_image_for_date)(date.date, region_ids, size, height, width, scaling_factor, colour_dict) for date in dates)
         
 def create_image_for_date(date: str, region_ids, size, height, width, scaling_factor, colour_dict):
     courses = get_run_count_for_date_in_regions(date, region_ids)
@@ -84,9 +85,19 @@ def create_image_for_date(date: str, region_ids, size, height, width, scaling_fa
     latitudes = list(map(lambda course: course.latitude, courses))
     longitudes = list(map(lambda course: course.longitude, courses))
     runners = list(map(lambda course: course.runners * scaling_factor, courses))
+    runner_count = int(sum(list(map(lambda course: course.runners, courses))))
     c = list(map(lambda course: colour_dict[course.region_id], courses))
 
-    plt.text(6000, 140000, date, fontsize=40)
+    plt.text(6000, 140000, "Date: " + date, fontsize=40)
+    plt.text(6000, 133000, "Runners: " + str(runner_count), fontsize=40)
+    
+    l = []
+    for region_id in region_ids:
+        l.append(plt.scatter([], [], s=200, edgecolors=colour_dict[region_id], color=colour_dict[region_id]))
+
+    labels = ['Greater Joburg', 'Tshwane', 'Soweto', 'Sedibeng', 'West Rand', 'Ekurhuleni']
+    leg = plt.legend(l, labels, ncol=1, frameon=True, fontsize=16, handlelength=2, loc=1, handletextpad=1, borderpad=1.8, scatterpoints=1)
+
     x, y = m(longitudes, latitudes)
     m.scatter(x, y, marker='.', c=c, cmap='tab10', s=runners, alpha=0.5)
 
