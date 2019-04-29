@@ -5,18 +5,18 @@ from decimal import Decimal
 from data.db import save_all, load_all
 from data.repository.event import get_all_course_seq_num, get_event_without_run
 
-def get_course_event_list(url, course_id):
-    html = get(url + "/results/eventhistory")
+def get_new_events_for(course):
+    html = get(course.url + "/results/eventhistory")
     event_page = BeautifulSoup(html, "html.parser")
     event_table = event_page.find_all('tbody')
     events = []
     rows = event_table[0].find_all('tr')
-    runs = get_all_course_seq_num(course_id)
+    runs = get_all_course_seq_num(course.id)
 
     for row in rows:
         aux = row.find_all('td')
         if int(aux[0].string) not in runs:
-            events.append(Event({'number':aux[0].string, 'date':aux[1].string}, course_id))
+            events.append(Event({'number':aux[0].string, 'date':aux[1].string}, course.id))
     return events
     
 def get_event_results(url, event_id, seq_num):
@@ -66,7 +66,7 @@ def get_all_event_results():
         print("Scraping course id " + str(course_id))
 
         try:
-            events = get_course_event_list(course.url, course_id)
+            events = get_new_events_for(course.url, course_id)
             save_all(events)
         except Exception:
             print('Fetching course event list for course {} failed'.format(course_id))
