@@ -62,17 +62,16 @@ def get_event_results(url, event_id, seq_num):
 def get_all_event_results():
     courses = load_all(Course)
     for course in courses:
-        course_id = course.id
-        print("Scraping course id " + str(course_id))
+        print("Scraping course id " + str(course.id))
 
         try:
             events = get_new_events_for(course)
             save_all(events)
         except Exception:
-            print('Fetching course event list for course {} failed'.format(course_id))
+            print('Fetching course event list for course {} failed'.format(course.id))
             continue
 
-        events = get_events_without_run(course_id)
+        events = get_events_without_run(course.id)
 
         for event in events:
             event_id = event.id
