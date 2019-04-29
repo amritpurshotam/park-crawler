@@ -14,7 +14,7 @@ def get_all_course_seq_num(course_id):
     ids = list(map(lambda event: event.run_sequence_number, sess.query(Event.run_sequence_number).filter_by(course_id=course_id).all()))
     return ids
 
-def get_event_without_run(course_id):
+def get_events_without_run(course_id):
     sess = get_session()
     events = sess.query(Event)\
                 .filter_by(course_id=course_id)\

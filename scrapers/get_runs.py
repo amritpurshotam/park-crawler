@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from data.models import Event, Course, Run
 from decimal import Decimal
 from data.db import save_all, load_all
-from data.repository.event import get_all_course_seq_num, get_event_without_run
+from data.repository.event import get_all_course_seq_num, get_events_without_run
 
 def get_new_events_for(course):
     html = get(course.url + "/results/eventhistory")
@@ -72,7 +72,7 @@ def get_all_event_results():
             print('Fetching course event list for course {} failed'.format(course_id))
             continue
 
-        events = get_event_without_run(course_id)
+        events = get_events_without_run(course_id)
 
         for event in events:
             event_id = event.id

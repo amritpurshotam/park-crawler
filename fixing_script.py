@@ -1,6 +1,6 @@
 from scrapers.get_runs import get_event_results, get_course_event_list
 from data.db import save_all, get_by_id
-from data.repository.event import get_event_without_run
+from data.repository.event import get_events_without_run
 from data.models import Event
 
 
