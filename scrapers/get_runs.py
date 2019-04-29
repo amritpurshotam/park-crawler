@@ -66,7 +66,7 @@ def get_all_event_results():
         print("Scraping course id " + str(course_id))
 
         try:
-            events = get_new_events_for(course.url, course_id)
+            events = get_new_events_for(course)
             save_all(events)
         except Exception:
             print('Fetching course event list for course {} failed'.format(course_id))
