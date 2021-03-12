@@ -9,27 +9,28 @@ from data.request import get
 
 def get_course_description(url):
     result = get(url)
-    soup = BeautifulSoup(result, 'html.parser')
-    titles = soup.find_all('h2')
+    soup = BeautifulSoup(result, "html.parser")
+    titles = soup.find_all("h2")
     description = []
 
     for title in titles:
-        if title.contents[0] == 'Course Description':
+        if title.contents[0] == "Course Description":
             for sibling in title.next_siblings:
-                if sibling.name == 'h2':
+                if sibling.name == "h2":
                     break
-                elif sibling.name == 'br':
+                elif sibling.name == "br":
                     continue
-                elif sibling.name == 'ul':
+                elif sibling.name == "ul":
                     for item in sibling.descendants:
                         if item.string is not None:
                             stripped = str.strip(item.string)
-                            if stripped != '':
+                            if stripped != "":
                                 description.append(stripped)
-                elif sibling.string is not None and sibling.string != '\n':
+                elif sibling.string is not None and sibling.string != "\n":
                     description.append(str.strip(sibling.string))
     description = deduplicate(description)
-    return ' '.join(description)
+    return " ".join(description)
+
 
 def deduplicate(string_list):
     seen = set()
@@ -40,15 +41,16 @@ def deduplicate(string_list):
             result.append(item)
     return result
 
+
 def run():
     result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
-    result = result.replace('\n', '')
+    result = result.replace("\n", "")
     tree = ET.fromstring(result)
 
     existing_country_ids = load_all_ids(Country)
     for country_xml in tree[0]:
-        if (country_xml.attrib['n'] == 'South Africa'):
-            country_id = int(country_xml.attrib['id'])
+        if country_xml.attrib["n"] == "South Africa":
+            country_id = int(country_xml.attrib["id"])
             if country_id not in existing_country_ids:
                 country = Country(country_xml.attrib)
                 save(country)
@@ -56,7 +58,7 @@ def run():
             existing_region_ids = load_all_ids(Region)
             regions = []
             for region in country_xml:
-                region_id = int(region.attrib['id'])
+                region_id = int(region.attrib["id"])
                 if region_id not in existing_region_ids:
                     regions.append(Region(region.attrib))
             save_all(regions)
@@ -71,12 +73,14 @@ def run():
             skip = False
             continue
         else:
-            if course.attrib['r'] != '':
-                if int(course.attrib['r']) in region_ids:
-                    course_id = int(course.attrib['id'])
+            if course.attrib["r"] != "":
+                if int(course.attrib["r"]) in region_ids:
+                    course_id = int(course.attrib["id"])
                     if course_id not in existing_course_ids:
-                        url = "{}/{}/course".format('https://www.parkrun.co.za', course.attrib['n'])
+                        url = "{}/{}/course".format(
+                            "https://www.parkrun.co.za", course.attrib["n"]
+                        )
                         description = get_course_description(url)
                         courses.append(Course(course.attrib, description))
-            
+
     save_all(courses)

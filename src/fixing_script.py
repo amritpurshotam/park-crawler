@@ -3,7 +3,7 @@ from data.models import Event
 from data.repository.event import get_events_without_run
 from scrapers.get_runs import get_course_event_list, get_event_results
 
-#html = ''.join(open('280.html', 'r').readlines())
+# html = ''.join(open('280.html', 'r').readlines())
 # results = get_event_results('https://www.parkrun.co.za/Swellendam', 5545, 280, html)
 # print(len(results))
 # save_all(results)
@@ -23,9 +23,11 @@ for id in ids:
     event_id = event.id
     seq_num = event.run_sequence_number
     try:
-        print('Scraping event id {}'.format(event_id))
-        results = get_event_results('https://www.parkrun.co.za/Swellendam', event_id, seq_num)
+        print("Scraping event id {}".format(event_id))
+        results = get_event_results(
+            "https://www.parkrun.co.za/Swellendam", event_id, seq_num
+        )
         save_all(results)
     except Exception:
-        print('Fetching results for event {} failed'.format(event_id))
+        print("Fetching results for event {} failed".format(event_id))
         continue
