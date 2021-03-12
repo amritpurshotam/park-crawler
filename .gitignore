@@ -107,5 +107,6 @@ venv.bak/
 .vscode/
 
 #Project Specific
-data/raw
-visualisations/output
+src/data/raw
+src/visualisations/output
+utils
