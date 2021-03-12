@@ -1,16 +1,21 @@
-import os, random
+import os
+import random
 
-from joblib import Parallel, delayed
-import matplotlib.pyplot as plt
 import matplotlib
-from matplotlib.lines import Line2D
-from mpl_toolkits.basemap import Basemap # TODO: replace with cartopy/kepler
+import matplotlib.pyplot as plt
 import numpy as np
+from joblib import Parallel, delayed
+from matplotlib.lines import Line2D
+from mpl_toolkits.basemap import Basemap  # TODO: replace with cartopy/kepler
 
-from data.models import Course, Region
-from data.repository.course import get_by_region, get_run_count_for_date, get_run_count_for_date_in_regions, get_run_count_for_date_in_regions
-from data.repository.event import get_all_dates
 from data.db import load_all_ids
+from data.models import Course, Region
+from data.repository.course import (
+    get_by_region,
+    get_run_count_for_date,
+    get_run_count_for_date_in_regions,
+)
+from data.repository.event import get_all_dates
 
 DISTRICT_SHAPEFILE_LOCATION = 'visualisations/shapefiles/District_Municipalities_2016'
 

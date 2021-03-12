@@ -1,7 +1,9 @@
-import urllib.request
-import requests
-import time
 import random
+import time
+import urllib.request
+
+import requests
+
 
 def get(url: str):
 

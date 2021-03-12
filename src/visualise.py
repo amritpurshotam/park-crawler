@@ -1,4 +1,5 @@
 import sys
+
 from visualisations.geo import draw_gauteng, rename_for_ffmpeg
 
 height=float(sys.argv[1])

@@ -1,9 +1,12 @@
-from data.request import get
-from bs4 import BeautifulSoup
-from data.models import Event, Course, Run
 from decimal import Decimal
-from data.db import save_all, load_all
+
+from bs4 import BeautifulSoup
+
+from data.db import load_all, save_all
+from data.models import Course, Event, Run
 from data.repository.event import get_all_course_seq_num, get_events_without_run
+from data.request import get
+
 
 def get_all_event_results():
     courses = load_all(Course)

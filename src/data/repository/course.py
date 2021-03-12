@@ -1,6 +1,8 @@
 from sqlalchemy.sql import func
+
 from data.db import get_session
 from data.models import Course, Event, Run
+
 
 def get_by_region(region_id: int):
     sess = get_session()

@@ -1,8 +1,11 @@
+from datetime import datetime
+
+from sqlalchemy.sql import func
+
 from data.db import get_session
 from data.models import Event, Run
 from data.repository.run import count_by_event
-from datetime import datetime
-from sqlalchemy.sql import func
+
 
 def get_by_course(course_id):
     sess = get_session()

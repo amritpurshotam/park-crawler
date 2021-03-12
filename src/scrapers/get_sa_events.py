@@ -1,8 +1,11 @@
-from data.request import get
 import xml.etree.ElementTree as ET
-from data.models import Country, Region, Course
-from data.db import save_all, save, load_all_ids
+
 from bs4 import BeautifulSoup
+
+from data.db import load_all_ids, save, save_all
+from data.models import Country, Course, Region
+from data.request import get
+
 
 def get_course_description(url):
     result = get(url)
