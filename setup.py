@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-with open('requirements.txt') as f:
+with open("requirements.txt") as f:
     install_requires = f.read().splitlines()
 
 setup(
@@ -20,11 +20,6 @@ setup(
             "isort==5.7.0",
             "mypy==0.812",
         ],
-        "notebook": [
-            "ipywidgets==7.6.3",
-            "jupyterlab==3.0.10",
-            "pandas-profiling[notebook]==2.11.0",
-            "widgetsnbextension==3.5.1"],
         "test": ["pytest==6.2.2"],
     },
 )
