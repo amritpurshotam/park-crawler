@@ -1,7 +1,8 @@
 from data.db import get_by_id, save_all
 from data.models import Event
-from data.repository.event import get_events_without_run
-from scrapers.get_runs import get_course_event_list, get_event_results
+
+# from data.repository.event import get_events_without_run
+from scrapers.get_runs import get_event_results  # ,get_course_event_list
 
 # html = ''.join(open('280.html', 'r').readlines())
 # results = get_event_results('https://www.parkrun.co.za/Swellendam', 5545, 280, html)
@@ -16,10 +17,10 @@ from scrapers.get_runs import get_course_event_list, get_event_results
 
 # note to check all runs with more than 100% age grade
 
-ids = [24041]
+event_ids = [24041]
 
-for id in ids:
-    event = get_by_id(Event, id)
+for event_id in event_ids:
+    event = get_by_id(Event, event_id)
     event_id = event.id
     seq_num = event.run_sequence_number
     try:

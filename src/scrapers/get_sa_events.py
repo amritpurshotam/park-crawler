@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET  # noqa: S405
 
 from bs4 import BeautifulSoup
 
@@ -7,7 +7,8 @@ from data.models import Country, Course, Region
 from data.request import get
 
 
-def get_course_description(url):
+# TODO: will revisit when doing Issue #3 to fix C901
+def get_course_description(url):  # noqa: C901
     result = get(url)
     soup = BeautifulSoup(result, "html.parser")
     titles = soup.find_all("h2")
@@ -42,10 +43,12 @@ def deduplicate(string_list):
     return result
 
 
-def run():
+def run():  # noqa: C901
     result = get("https://www.parkrun.co.za/wp-content/themes/parkrun/xml/geo.xml")
     result = result.replace("\n", "")
-    tree = ET.fromstring(result)
+    tree = ET.fromstring(  # noqa: S314 This whole function will be replaced in Issue #3
+        result
+    )
 
     existing_country_ids = load_all_ids(Country)
     for country_xml in tree[0]:
@@ -69,7 +72,7 @@ def run():
     courses = []
     skip = True
     for course in tree:
-        if skip == True:
+        if skip:
             skip = False
             continue
         else:

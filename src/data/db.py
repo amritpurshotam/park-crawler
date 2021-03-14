@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 def get_session():
     driver = "SQL+Server"
     username = "ParkrunUser"
-    password = "abc123"
+    password = "abc123"  # noqa: S105
     host = "(local)"
     database = "Parkrun"
     connection_string = "mssql+pyodbc://{0}:{1}@{2}/{3}?driver={4}".format(
@@ -29,9 +29,9 @@ def load_all_ids(entity):
     return ids
 
 
-def get_by_id(entity, id):
+def get_by_id(entity, entity_id):
     sess = get_session()
-    return sess.query(entity).get(id)
+    return sess.query(entity).get(entity_id)
 
 
 def save(entity):

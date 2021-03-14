@@ -10,9 +10,9 @@ def get_by_region(region_id: int):
     return regions
 
 
-def get_by_id(id: int):
+def get_by_id(course_id: int):
     sess = get_session()
-    course = sess.query(Course).filter_by(id=id).first()
+    course = sess.query(Course).filter_by(id=course_id).first()
     return course
 
 

@@ -79,7 +79,7 @@ def get_event_results(url, event_id, seq_num):
         else:
             try:
                 hours = int(time_str[-7:-6])
-            except:
+            except Exception:
                 hours = int(0)
             minutes = int(time_str[-5:-3])
             seconds = int(time_str[-2:])
@@ -94,7 +94,9 @@ def get_event_results(url, event_id, seq_num):
                             "position": int(aux[0].string),
                             "id": str(
                                 hash(
-                                    row.a["href"].strip("athletehistory?athleteNumber=")
+                                    row.a["href"].replace(
+                                        "athletehistory?athleteNumber=", ""
+                                    )
                                 )
                             ),
                             "hours": hours,

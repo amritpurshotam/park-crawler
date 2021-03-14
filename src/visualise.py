@@ -11,4 +11,7 @@ draw_gauteng(height, width, size, scaling_factor, n_jobs)
 rename_for_ffmpeg("C:/Development/park-crawler/visualisations/output/gauteng")
 
 # python visualise.py 150000 150000 20 30 1
-# ffmpeg -r 15 -i "C:\Development\park-crawler\visualisations\output\gauteng\%d.png" "C:\Development\park-crawler\visualisations\output\gauteng.mp4"
+
+# ffmpeg -r 15 -i
+# "C:\Development\park-crawler\visualisations\output\gauteng\%d.png"
+# "C:\Development\park-crawler\visualisations\output\gauteng.mp4"

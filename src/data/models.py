@@ -8,7 +8,7 @@ Base = declarative_base()
 class Country(Base):
     __tablename__ = "Countries"
 
-    id = Column("CountryId", Integer, primary_key=True)
+    id = Column("CountryId", Integer, primary_key=True)  # noqa: A003
     name = Column("Name", String(100))
     base_url = Column("BaseUrl", String(100))
     latitude = Column("Latitude", Float(precision=6))
@@ -25,7 +25,7 @@ class Country(Base):
 class Region(Base):
     __tablename__ = "Regions"
 
-    id = Column("RegionId", Integer, primary_key=True)
+    id = Column("RegionId", Integer, primary_key=True)  # noqa: A003
     country_id = Column("CountryId", Integer, ForeignKey("Countries.CountryId"))
     name = Column("Name", String(100))
     latitude = Column("Latitude", Float(precision=6))
@@ -42,7 +42,7 @@ class Region(Base):
 class Course(Base):
     __tablename__ = "Courses"
 
-    id = Column("CourseId", Integer, primary_key=True)
+    id = Column("CourseId", Integer, primary_key=True)  # noqa: A003
     region_id = Column("RegionId", Integer, ForeignKey("Regions.RegionId"))
     name = Column("Name", String(100))
     url = Column("Url", String(200))
@@ -65,7 +65,7 @@ class Course(Base):
 class Event(Base):
     __tablename__ = "Events"
 
-    id = Column("EventId", Integer, primary_key=True)
+    id = Column("EventId", Integer, primary_key=True)  # noqa: A003
     course_id = Column("CourseId", Integer, ForeignKey("Courses.CourseId"))
     run_sequence_number = Column("RunSequenceNumber", Integer)
     date = Column("Date", String(10))
