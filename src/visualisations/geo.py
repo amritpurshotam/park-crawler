@@ -3,13 +3,11 @@ import random
 
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 from joblib import Parallel, delayed
-from matplotlib.lines import Line2D
 from mpl_toolkits.basemap import Basemap  # TODO: replace with cartopy/kepler
 
 from data.db import load_all_ids
-from data.models import Course, Region
+from data.models import Region
 from data.repository.course import (
     get_by_region,
     get_run_count_for_date,
@@ -41,10 +39,13 @@ def draw_national_parkruns_with_regions():
         longitudes = list(map(lambda course: course.longitude, courses))
 
         sizes = []
-        ages = []
-        r = (random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1))
+        r = (
+            random.uniform(0, 1),  # noqa: S311
+            random.uniform(0, 1),  # noqa: S311
+            random.uniform(0, 1),  # noqa: S311
+        )
         color = []
-        for i in range(0, len(latitudes)):
+        for _ in range(0, len(latitudes)):
             sizes.append(300)
             color.append(r)
 
@@ -128,9 +129,9 @@ def create_image_for_date(
     plt.text(6000, 140000, "Date: " + date, fontsize=40)
     plt.text(6000, 133000, "Runners: " + str(runner_count), fontsize=40)
 
-    l = []
+    region_scatters = []
     for region_id in region_ids:
-        l.append(
+        region_scatters.append(
             plt.scatter(
                 [],
                 [],
@@ -140,26 +141,26 @@ def create_image_for_date(
             )
         )
 
-    labels = [
-        "Greater Joburg",
-        "Tshwane",
-        "Soweto",
-        "Sedibeng",
-        "West Rand",
-        "Ekurhuleni",
-    ]
-    leg = plt.legend(
-        l,
-        labels,
-        ncol=1,
-        frameon=True,
-        fontsize=16,
-        handlelength=2,
-        loc=1,
-        handletextpad=1,
-        borderpad=1.8,
-        scatterpoints=1,
-    )
+    # labels = [
+    #     "Greater Joburg",
+    #     "Tshwane",
+    #     "Soweto",
+    #     "Sedibeng",
+    #     "West Rand",
+    #     "Ekurhuleni",
+    # ]
+    # leg = plt.legend(
+    #     region_scatters,
+    #     labels,
+    #     ncol=1,
+    #     frameon=True,
+    #     fontsize=16,
+    #     handlelength=2,
+    #     loc=1,
+    #     handletextpad=1,
+    #     borderpad=1.8,
+    #     scatterpoints=1,
+    # )
 
     x, y = m(longitudes, latitudes)
     m.scatter(x, y, marker=".", c=c, cmap="tab10", s=runners, alpha=0.5)

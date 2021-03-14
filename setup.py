@@ -19,6 +19,7 @@ setup(
             "flake8-comprehensions==.3.3.1",
             "isort==5.7.0",
             "mypy==0.812",
+            "sqlalchemy-stubs==0.4",
         ],
         "test": ["pytest==6.2.2"],
     },
