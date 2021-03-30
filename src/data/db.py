@@ -3,14 +3,11 @@ from sqlalchemy.orm import sessionmaker
 
 
 def get_session():
-    driver = "SQL+Server"
-    username = "ParkrunUser"
-    password = "abc123"  # noqa: S105
-    host = "(local)"
-    database = "Parkrun"
-    connection_string = "mssql+pyodbc://{0}:{1}@{2}/{3}?driver={4}".format(
-        username, password, host, database, driver
-    )
+    username = "postgres"
+    password = "postgres"  # noqa: S105
+    host = "localhost"
+    database = "postgres"
+    connection_string = f"postgresql+psycopg2://{username}:{password}@{host}/{database}"
     engine = create_engine(connection_string)
     Session = sessionmaker(bind=engine)
     session = Session()
