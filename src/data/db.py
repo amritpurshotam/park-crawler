@@ -1,12 +1,14 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
 def get_session():
-    username = "postgres"
-    password = "postgres"  # noqa: S105
-    host = "localhost"
-    database = "postgres"
+    username = os.environ["POSTGRES_USER"]
+    password = os.environ["POSTGRES_PASSWORD"]
+    host = os.environ["POSTGRES_HOST"]
+    database = os.environ["POSTGRES_DB"]
     connection_string = f"postgresql+psycopg2://{username}:{password}@{host}/{database}"
     engine = create_engine(connection_string)
     Session = sessionmaker(bind=engine)
