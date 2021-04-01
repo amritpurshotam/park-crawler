@@ -39,16 +39,16 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          flake8 --config=setup.cfg src setup.py
+          flake8 --config=setup.cfg migrations src setup.py
 
       - name: Format with black
         run: |
-          black --check src setup.py
+          black --check migrations src setup.py
 
       - name: Format with isort
         run: |
-          isort --check --settings-path=setup.cfg src setup.py
+          isort --check --settings-path=setup.cfg migrations src setup.py
 
       - name: Type-check with mypy
         run: |
-          mypy --config-file=setup.cfg src setup.py
+          mypy --config-file=setup.cfg migrations src setup.py
