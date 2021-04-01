@@ -11,8 +11,8 @@ class Country(Base):
     id = Column("CountryId", Integer, primary_key=True)  # noqa: A003
     name = Column("Name", String(100))
     base_url = Column("BaseUrl", String(100))
-    latitude = Column("Latitude", Float(precision=6))
-    longitude = Column("Longitude", Float(precision=6))
+    latitude = Column("Latitude", Float(precision=6), nullable=False)
+    longitude = Column("Longitude", Float(precision=6), nullable=False)
 
     def __init__(self, country_dict):
         self.id = country_dict["id"]
@@ -26,10 +26,12 @@ class Region(Base):
     __tablename__ = "Regions"
 
     id = Column("RegionId", Integer, primary_key=True)  # noqa: A003
-    country_id = Column("CountryId", Integer, ForeignKey("Countries.CountryId"))
+    country_id = Column(
+        "CountryId", Integer, ForeignKey("Countries.CountryId"), nullable=False
+    )
     name = Column("Name", String(100))
-    latitude = Column("Latitude", Float(precision=6))
-    longitude = Column("Longitude", Float(precision=6))
+    latitude = Column("Latitude", Float(precision=6), nullable=False)
+    longitude = Column("Longitude", Float(precision=6), nullable=False)
 
     def __init__(self, region_dict):
         self.id = region_dict["id"]
@@ -43,12 +45,14 @@ class Course(Base):
     __tablename__ = "Courses"
 
     id = Column("CourseId", Integer, primary_key=True)  # noqa: A003
-    region_id = Column("RegionId", Integer, ForeignKey("Regions.RegionId"))
-    name = Column("Name", String(100))
-    url = Column("Url", String(200))
-    latitude = Column("Latitude", Float(precision=6))
-    longitude = Column("Longitude", Float(precision=6))
-    description = Column("Description", String(2000))
+    region_id = Column(
+        "RegionId", Integer, ForeignKey("Regions.RegionId"), nullable=False
+    )
+    name = Column("Name", String(100), nullable=False)
+    url = Column("Url", String(200), nullable=False)
+    latitude = Column("Latitude", Float(precision=6), nullable=False)
+    longitude = Column("Longitude", Float(precision=6), nullable=False)
+    description = Column("Description", String(2000), nullable=False)
 
     region = relationship("Region", foreign_keys=[region_id])
 
@@ -66,9 +70,11 @@ class Event(Base):
     __tablename__ = "Events"
 
     id = Column("EventId", Integer, primary_key=True)  # noqa: A003
-    course_id = Column("CourseId", Integer, ForeignKey("Courses.CourseId"))
-    run_sequence_number = Column("RunSequenceNumber", Integer)
-    date = Column("Date", String(10))
+    course_id = Column(
+        "CourseId", Integer, ForeignKey("Courses.CourseId"), nullable=False
+    )
+    run_sequence_number = Column("RunSequenceNumber", Integer, nullable=False)
+    date = Column("Date", String(10), nullable=False)
 
     runs = relationship("Run")
 
@@ -82,9 +88,9 @@ class Run(Base):
     __tablename__ = "Runs"
 
     run_id = Column("RunId", Integer, primary_key=True)
-    event_id = Column("EventId", Integer, ForeignKey("Events.EventId"))
-    parkrunner_id = Column("ParkRunnerId", String(50))
-    position = Column("Position", Integer)
+    event_id = Column("EventId", Integer, ForeignKey("Events.EventId"), nullable=False)
+    parkrunner_id = Column("ParkRunnerId", String(50), nullable=False)
+    position = Column("Position", Integer, nullable=False)
     hours = Column("Hours", Integer)
     minutes = Column("Minutes", Integer)
     seconds = Column("Seconds", Integer)
