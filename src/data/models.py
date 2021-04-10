@@ -52,7 +52,7 @@ class Course(Base):
     url = Column("Url", String(200), nullable=False)
     latitude = Column("Latitude", Float(precision=6), nullable=False)
     longitude = Column("Longitude", Float(precision=6), nullable=False)
-    description = Column("Description", String(2000), nullable=False)
+    description = Column("Description", String(8000), nullable=False)
 
     region = relationship("Region", foreign_keys=[region_id])
 
