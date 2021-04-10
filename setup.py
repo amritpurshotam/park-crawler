@@ -14,7 +14,7 @@ setup(
             "black==20.8b1",
             "flake8==3.9.0",
             "flake8-bandit==2.1.2",
-            "flake8-bugbear==21.3.2",
+            "flake8-bugbear==21.4.3",
             "flake8-builtins==1.5.3",
             "flake8-comprehensions==3.4.0",
             "isort==5.8.0",
