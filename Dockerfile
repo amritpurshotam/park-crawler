@@ -8,3 +8,5 @@ RUN pip install --no-cache-dir -e .
 
 COPY migrations /app/migrations
 COPY src /app/src
+
+ENV PYTHONHASHSEED 0
