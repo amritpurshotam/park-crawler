@@ -6,13 +6,13 @@ Base = declarative_base()
 
 
 class Country(Base):
-    __tablename__ = "Countries"
+    __tablename__ = "country"
 
-    id = Column("CountryId", Integer, primary_key=True)  # noqa: A003
-    name = Column("Name", String(100))
-    base_url = Column("BaseUrl", String(100))
-    latitude = Column("Latitude", Float(precision=6), nullable=False)
-    longitude = Column("Longitude", Float(precision=6), nullable=False)
+    id = Column("id", Integer, primary_key=True)  # noqa: A003
+    name = Column("name", String(100))
+    base_url = Column("base_url", String(100))
+    latitude = Column("latitude", Float(precision=6), nullable=False)
+    longitude = Column("longitude", Float(precision=6), nullable=False)
 
     def __init__(self, country_dict):
         self.id = country_dict["id"]
@@ -23,15 +23,13 @@ class Country(Base):
 
 
 class Region(Base):
-    __tablename__ = "Regions"
+    __tablename__ = "region"
 
-    id = Column("RegionId", Integer, primary_key=True)  # noqa: A003
-    country_id = Column(
-        "CountryId", Integer, ForeignKey("Countries.CountryId"), nullable=False
-    )
-    name = Column("Name", String(100))
-    latitude = Column("Latitude", Float(precision=6), nullable=False)
-    longitude = Column("Longitude", Float(precision=6), nullable=False)
+    id = Column("id", Integer, primary_key=True)  # noqa: A003
+    country_id = Column("country_id", Integer, ForeignKey("country.id"), nullable=False)
+    name = Column("name", String(100))
+    latitude = Column("latitude", Float(precision=6), nullable=False)
+    longitude = Column("longitude", Float(precision=6), nullable=False)
 
     def __init__(self, region_dict):
         self.id = region_dict["id"]
@@ -42,17 +40,15 @@ class Region(Base):
 
 
 class Course(Base):
-    __tablename__ = "Courses"
+    __tablename__ = "course"
 
-    id = Column("CourseId", Integer, primary_key=True)  # noqa: A003
-    region_id = Column(
-        "RegionId", Integer, ForeignKey("Regions.RegionId"), nullable=False
-    )
-    name = Column("Name", String(100), nullable=False)
-    url = Column("Url", String(200), nullable=False)
-    latitude = Column("Latitude", Float(precision=6), nullable=False)
-    longitude = Column("Longitude", Float(precision=6), nullable=False)
-    description = Column("Description", String(8000), nullable=False)
+    id = Column("id", Integer, primary_key=True)  # noqa: A003
+    region_id = Column("region_id", Integer, ForeignKey("region.id"), nullable=False)
+    name = Column("name", String(100), nullable=False)
+    url = Column("url", String(200), nullable=False)
+    latitude = Column("latitude", Float(precision=6), nullable=False)
+    longitude = Column("longitude", Float(precision=6), nullable=False)
+    description = Column("description", String(8000), nullable=False)
 
     region = relationship("Region", foreign_keys=[region_id])
 
@@ -67,14 +63,12 @@ class Course(Base):
 
 
 class Event(Base):
-    __tablename__ = "Events"
+    __tablename__ = "event"
 
-    id = Column("EventId", Integer, primary_key=True)  # noqa: A003
-    course_id = Column(
-        "CourseId", Integer, ForeignKey("Courses.CourseId"), nullable=False
-    )
-    run_sequence_number = Column("RunSequenceNumber", Integer, nullable=False)
-    date = Column("Date", String(10), nullable=False)
+    id = Column("id", Integer, primary_key=True)  # noqa: A003
+    course_id = Column("course_id", Integer, ForeignKey("course.id"), nullable=False)
+    run_sequence_number = Column("run_sequence_number", Integer, nullable=False)
+    date = Column("date", String(10), nullable=False)
 
     runs = relationship("Run")
 
@@ -85,20 +79,20 @@ class Event(Base):
 
 
 class Run(Base):
-    __tablename__ = "Runs"
+    __tablename__ = "run"
 
-    run_id = Column("RunId", Integer, primary_key=True)
-    event_id = Column("EventId", Integer, ForeignKey("Events.EventId"), nullable=False)
-    parkrunner_id = Column("ParkRunnerId", String(50), nullable=False)
-    position = Column("Position", Integer, nullable=False)
-    hours = Column("Hours", Integer)
-    minutes = Column("Minutes", Integer)
-    seconds = Column("Seconds", Integer)
-    age_category = Column("AgeCategory", String(9))
-    age_grade = Column("AgeGrade", Float(precision=2))
-    gender = Column("Gender", String(1))
-    gender_position = Column("GenderPosition", Integer)
-    note = Column("Note", String(50))
+    run_id = Column("id", Integer, primary_key=True)
+    event_id = Column("event_id", Integer, ForeignKey("event.id"), nullable=False)
+    parkrunner_id = Column("parkrunner_id", String(50), nullable=False)
+    position = Column("position", Integer, nullable=False)
+    hours = Column("hours", Integer)
+    minutes = Column("minutes", Integer)
+    seconds = Column("seconds", Integer)
+    age_category = Column("age_category", String(9))
+    age_grade = Column("age_grade", Float(precision=2))
+    gender = Column("gender", String(1))
+    gender_position = Column("gender_position", Integer)
+    note = Column("note", String(50))
 
     def __init__(self, run_dict, event_id):
         self.event_id = event_id
