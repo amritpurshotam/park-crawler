@@ -37,7 +37,6 @@ class Course(Base):
 
     def __init__(self, course_dict, description):
         self.id = course_dict["id"]
-        self.region_id = course_dict["r"]
         self.url = "{}/{}".format("https://www.parkrun.co.za", course_dict["n"])
         self.name = course_dict["m"]
         self.latitude = course_dict["la"]
