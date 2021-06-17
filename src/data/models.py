@@ -22,35 +22,18 @@ class Country(Base):
         self.longitude = country_dict["lo"]
 
 
-class Region(Base):
-    __tablename__ = "region"
-
-    id = Column("id", Integer, primary_key=True)  # noqa: A003
-    country_id = Column("country_id", Integer, ForeignKey("country.id"), nullable=False)
-    name = Column("name", String(100))
-    latitude = Column("latitude", Float(precision=6), nullable=False)
-    longitude = Column("longitude", Float(precision=6), nullable=False)
-
-    def __init__(self, region_dict):
-        self.id = region_dict["id"]
-        self.country_id = region_dict["pid"]
-        self.name = region_dict["n"]
-        self.latitude = region_dict["la"]
-        self.longitude = region_dict["lo"]
-
-
 class Course(Base):
     __tablename__ = "course"
 
     id = Column("id", Integer, primary_key=True)  # noqa: A003
-    region_id = Column("region_id", Integer, ForeignKey("region.id"), nullable=False)
+    country_id = Column("country_id", Integer, ForeignKey("country.id"), nullable=False)
     name = Column("name", String(100), nullable=False)
     url = Column("url", String(200), nullable=False)
     latitude = Column("latitude", Float(precision=6), nullable=False)
     longitude = Column("longitude", Float(precision=6), nullable=False)
     description = Column("description", String(8000), nullable=False)
 
-    region = relationship("Region", foreign_keys=[region_id])
+    country = relationship("Country", foreign_keys=[country_id])
 
     def __init__(self, course_dict, description):
         self.id = course_dict["id"]
