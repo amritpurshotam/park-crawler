@@ -1,5 +1,5 @@
-alembic==1.5.8
+alembic==1.6.5
 beautifulsoup4==4.9.3
-psycopg2==2.8.6
+psycopg2==2.9.1
 requests==2.25.1
-sqlalchemy==1.4.7
+sqlalchemy==1.4.18
