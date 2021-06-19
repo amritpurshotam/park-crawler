@@ -31,6 +31,8 @@ def upgrade():
     """
     )
 
+    op.alter_column("course", "country_id", existing_type=sa.INTEGER(), nullable=False)
+
     op.drop_constraint("course_region_id_fkey", "course", type_="foreignkey")
     op.drop_column("course", "region_id")
     op.drop_table("region")
