@@ -9,17 +9,27 @@ class Country(Base):
     __tablename__ = "country"
 
     id = Column("id", Integer, primary_key=True)  # noqa: A003
-    name = Column("name", String(100))
     base_url = Column("base_url", String(100))
-    latitude = Column("latitude", Float(precision=6), nullable=False)
-    longitude = Column("longitude", Float(precision=6), nullable=False)
+    bottom_left_latitude = Column(
+        "bottom_left_latitude", Float(precision=6), nullable=False
+    )
+    bottom_left_longitude = Column(
+        "bottom_left_longitude", Float(precision=6), nullable=False
+    )
+    top_right_latitude = Column(
+        "top_right_latitude", Float(precision=6), nullable=False
+    )
+    top_right_longitude = Column(
+        "top_right_longitude", Float(precision=6), nullable=False
+    )
 
-    def __init__(self, country_dict):
-        self.id = country_dict["id"]
-        self.name = country_dict["n"]
-        self.base_url = country_dict["u"]
-        self.latitude = country_dict["la"]
-        self.longitude = country_dict["lo"]
+    def __init__(self, country_code: int, base_url: str, coordinates: list):
+        self.id = country_code
+        self.base_url = base_url
+        self.bottom_left_latitude = coordinates[1]
+        self.bottom_left_longitude = coordinates[0]
+        self.top_right_latitude = coordinates[3]
+        self.top_right_longitude = coordinates[2]
 
 
 class Course(Base):
@@ -28,7 +38,9 @@ class Course(Base):
     id = Column("id", Integer, primary_key=True)  # noqa: A003
     country_id = Column("country_id", Integer, ForeignKey("country.id"), nullable=False)
     name = Column("name", String(100), nullable=False)
+    localised_name = Column("localised_name", String(100), nullable=True)
     url = Column("url", String(200), nullable=False)
+    location = Column("location", String(100), nullable=True)
     latitude = Column("latitude", Float(precision=6), nullable=False)
     longitude = Column("longitude", Float(precision=6), nullable=False)
     description = Column("description", String(8000), nullable=False)
